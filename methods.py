@@ -1,21 +1,31 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
+from datetime import datetime
+
+now = datetime.now()
+dt_string = now.strftime("%d-%m-%Y-%H-%M")
 
 # Modify these fields for your usecase
-certificate_file_path = os.getcwd() + "/EMPTY.png"
-output_file_path = os.getcwd() + '/output'
-
-x_center = 1190
-y_center = 930
-
-font_path = "segoeuibold.ttf"
-font_size = 150
-color = (0,0,0,255) # R G B Opacity
 
 
-def createCertificate(name):
-    output_path = output_file_path + f'/certificate-{name}.png'
-    font_color = (255, 0, 0)  # RGB color (red in this example)
+
+def createCertificate(name, config, path):
+    certificate_file_path = config[2].strip()
+
+    output_file_path = path + f'/output'
+
+    if not os.path.exists(output_file_path):
+        os.mkdir(output_file_path)
+
+    x_center = int(config[0].strip())
+    y_center = int(config[1].strip())
+
+    font_path = config[3].strip()
+    font_size = int(config[4].strip())
+    colorList = []
+    for item in config[5].split(' '):
+        colorList.append(int(item))
+    color = tuple(colorList)
 
     # Open the image
     image = Image.open(certificate_file_path)
@@ -36,7 +46,7 @@ def createCertificate(name):
     draw.text(position, name, font=font, fill=color)
 
     # Save the modified image to a new file
-    image.save(output_path)
+    image.save(output_file_path+f'/{dt_string}_{name}.png')
 
 
 
