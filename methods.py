@@ -5,9 +5,28 @@ from datetime import datetime
 now = datetime.now()
 dt_string = now.strftime("%d-%m-%Y-%H-%M")
 
-# Modify these fields for your usecase
+import tkinter as tk
+from tkinter import filedialog
 
+def select_directory():
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
 
+    # Show the directory selector dialog and store the selected path
+    selected_directory = filedialog.askdirectory()
+
+    # Return the selected directory path
+    return selected_directory
+
+def select_file():
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+
+    # Show the directory selector dialog and store the selected path
+    selected_file = filedialog.askopenfilename()
+
+    # Return the selected directory path
+    return selected_file
 
 def createCertificate(name, config, path):
     certificate_file_path = config[2].strip()
@@ -24,7 +43,7 @@ def createCertificate(name, config, path):
     font_size = int(config[4].strip())
     colorList = []
     for item in config[5].split(' '):
-        colorList.append(int(item))
+        colorList.append(int(item.strip(',')))
     color = tuple(colorList)
 
     # Open the image
@@ -47,7 +66,6 @@ def createCertificate(name, config, path):
 
     # Save the modified image to a new file
     image.save(output_file_path+f'/{dt_string}_{name}.png')
-
 
 
 
