@@ -46,7 +46,7 @@ def writeConfigFile(config, path):
     except Exception as e:
         print(f"Error writing to the file: {e}")
 
-def launchProject(path):
+def launchProject(path, name):
     Continue = True
     userinput = ""
     file1 = open(path + "/config.txt", 'r')
@@ -68,7 +68,7 @@ def launchProject(path):
                 file1.close()
                 makeCerts(config, path)
         elif userinput.strip() == '2':
-            new_conf = Settings(config)
+            new_conf = Settings(config, name)
             if len(new_conf) != 0:
                 config = new_conf
                 writeConfigFile(config, path + "/config.txt")
@@ -99,7 +99,7 @@ while mainContinue:
             print()
             userinput = input()
             if userinput.isnumeric() and int(userinput) > 0 and int(userinput) <= len(projects):
-                launchProject(projects[int(userinput)-1][1].strip())
+                launchProject(projects[int(userinput)-1][1].strip(), projects[int(userinput)-1][0].strip())
             else:
                 if userinput != 'exit':
                     print("invalid selection")
@@ -114,7 +114,7 @@ while mainContinue:
         if not os.path.exists(project_path + f'/{project_name}'):
             os.mkdir(project_path + f'/{project_name}')
         # Add config file in created directory
-        writeConfigFile(Settings(None), project_path + f'/{project_name}' + '/config.txt')
+        writeConfigFile(Settings(project_name, None), project_path + f'/{project_name}' + '/config.txt')
         # Add project to projects
         projects.append([project_name, str(project_path) + f'/{project_name}'])
         print(projects)
