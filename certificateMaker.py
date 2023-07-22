@@ -51,6 +51,7 @@ def launchProject(path):
     userinput = ""
     file1 = open(path + "/config.txt", 'r')
     config = file1.readlines()
+    file1.close()
     while Continue:
         print("Make a selection:")
         print("1. Generate Certificates")
@@ -62,6 +63,9 @@ def launchProject(path):
                 print("error, config file not found")
                 Continue = False
             else:
+                file1 = open(path + "/config.txt", 'r')
+                config = file1.readlines()
+                file1.close()
                 makeCerts(config, path)
         elif userinput.strip() == '2':
             new_conf = Settings(config)
