@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from PIL import Image, ImageDraw, ImageFont
 import os
 from datetime import datetime
@@ -23,7 +25,7 @@ def select_file():
     root.withdraw()  # Hide the main window
 
     # Show the directory selector dialog and store the selected path
-    selected_file = filedialog.askopenfilename()
+    selected_file = filedialog.askopenfilename(initialdir=os.getcwd()+'/fonts')
 
     # Return the selected directory path
     return selected_file
@@ -67,6 +69,55 @@ def createCertificate(name, config, path):
     # Save the modified image to a new file
     image.save(output_file_path+f'/{dt_string}_{name}.png')
 
+def getDemoImage(config):
+    certificate_file_path = config[2].strip()
+
+    x_center = int(config[0].strip())
+    y_center = int(config[1].strip())
+
+    font_path = config[3].strip()
+    font_size = int(config[4].strip())
+    colorList = []
+    for item in config[5].split(' '):
+        colorList.append(int(item.strip(',')))
+    color = tuple(colorList)
+
+    # Open the image
+    image = Image.open(certificate_file_path)
+
+    # Create a drawing context
+    draw = ImageDraw.Draw(image)
+
+    font = ImageFont.truetype(font_path, font_size)
+
+    text_width, text_height = font.getsize("John Smith")
+
+    # Calculate the position to center the text
+    x_position =  x_center - text_width// 2
+    y_position =  y_center - text_height// 2
+    position = (x_position, y_position)
+
+    # Draw the text on the image
+    draw.text(position, "John Smith", font=font, fill=color)
+
+    # Convert the PIL Image object to bytes using BytesIO
+    image_bytes = BytesIO()
+    image.save(image_bytes, format="PNG")
+    image_bytes.seek(0)
+
+    # Return the bytes-like object containing the image data
+    return image_bytes.read()
+
+def resize_image(image_data, desired_width):
+    image = Image.open(BytesIO(image_data))
+    image.thumbnail((desired_width, image.size[1]))
+
+    # Convert the resized PIL Image object to bytes using BytesIO
+    resized_image_bytes = BytesIO()
+    image.save(resized_image_bytes, format="PNG")
+    resized_image_bytes.seek(0)
+
+    return resized_image_bytes.read()
 
 
 

@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from methods import select_directory, select_file
+from methods import select_file, getDemoImage, resize_image
 
 def Settings(config):
     dcertpath = ""
@@ -28,7 +28,8 @@ def Settings(config):
 
     sg.theme('DarkAmber')   # Add a touch of color
     # All the stuff inside your window.
-    layout = [  [sg.Text('Certificate Path:'), sg.InputText(default_text=dcertpath, key='-CERT_PATH-')],
+    layout = [  [sg.Image(key="-IMAGE-", size=(300, 300))],
+                [sg.Text('Certificate Path:'), sg.InputText(default_text=dcertpath, key='-CERT_PATH-')],
                 [sg.Button('Chose Certificate')],
                 [sg.Text('X-Center:'), sg.InputText(default_text=dx)],
                 [sg.Text('Y-Center:'), sg.InputText(default_text=dy)],
@@ -39,7 +40,7 @@ def Settings(config):
                 [sg.Text('Green:'), sg.InputText(default_text=dgreen)],
                 [sg.Text('Blue:'), sg.InputText(default_text=dblue)],
                 [sg.Text('Opacity:'), sg.InputText(default_text=dopacity)],
-                [sg.Button('Save'), sg.Button('Cancel')] ]
+                [sg.Button('Save'), sg.Button('Cancel'), sg.Button('See Demo')]]
 
     # Create the Window
     window = sg.Window('Project Settings', layout)
@@ -57,6 +58,10 @@ def Settings(config):
             window.Element('-CERT_PATH-').Update(select_file())
         elif event == "Chose Font":
             window.Element('-FONT_PATH-').Update(select_file())
+        elif event == "See Demo":
+            demo_image = getDemoImage([values[0], values[1], values['-CERT_PATH-'].replace("\\\\", '/'), values['-FONT_PATH-'].replace("\\\\", '/'), values[2], f"{values[3]}, {values[4]}, {values[5]}, {values[6]}"])
+            demo_image = resize_image(demo_image, 300)
+            window["-IMAGE-"].update(data=demo_image)
 
     window.close()
     return new_settings
