@@ -1,0 +1,4 @@
+pdf2image
+Pillow==9.5.0
+PySimpleGUI
+python-poppler

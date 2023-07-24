@@ -1,5 +1,4 @@
-1. Install Python3
-2. pip install Pillow==9.5.0
-3. In methods.py, modify required fields
-4. run main.py  
-5. Exit app with Ctrl-C when done
+1. Install Python3, add python to system path
+2. pip install -r requirements.txt
+3. Add poppler (Release-23.07.0-0\poppler-23.07.0\Library\bin) to path
+4. run certificateMaker.py  

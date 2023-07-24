@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from methods import select_file, getDemoImage, resize_image
+from methods import select_file, select_font, getDemoImage, resize_image
 
 def Settings(config, name):
     dcertpath = ""
@@ -48,7 +48,6 @@ def Settings(config, name):
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
         event, values = window.read()
-        print(values)
         if event == sg.WIN_CLOSED or event == 'Cancel': # if user closes window or clicks cancel
             break
         elif event == 'Save':
@@ -57,7 +56,7 @@ def Settings(config, name):
         elif event == "Chose Certificate":
             window.Element('-CERT_PATH-').Update(select_file())
         elif event == "Chose Font":
-            window.Element('-FONT_PATH-').Update(select_file())
+            window.Element('-FONT_PATH-').Update(select_font())
         elif event in ["-CERT_PATH-", "-X_CENTER-", "-Y_PATH-", "-FONT_PATH-", "FONT_SIZE", "RED", "GREEN", "BLUE", "See Demo"]:
             demo_image = getDemoImage([values["-X_CENTER-"], values["-Y_CENTER-"], values['-CERT_PATH-'].replace("\\\\", '/'), values['-FONT_PATH-'].replace("\\\\", '/'), values["FONT_SIZE"], f"{values['RED']}, {values['GREEN']}, {values['BLUE']}, {values[0]}"])
             demo_image = resize_image(demo_image, 400)

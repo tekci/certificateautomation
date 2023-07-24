@@ -22,7 +22,6 @@ def writeProjectsToFile(projects):
         file1 = open("projectlist.txt", mode='w')
     else:
         file1 = open("projectlist.txt", 'w+')
-    print(projects)
     for project in projects:
         try:
             file1.write(project[0] + '-' + project[1].strip() + '\n')
@@ -57,7 +56,10 @@ def launchProject(path, name):
         print("1. Generate Certificates")
         print("2. Change Settings")
         print("3. Exit")
-        userinput = input()
+        try:
+            userinput = input()
+        except:
+            pass
         if userinput.strip() == '1':
             if not os.path.exists(path + "/config.txt"):
                 print("error, config file not found")
@@ -86,7 +88,10 @@ while mainContinue:
     print("1. Open Existing Project")
     print("2. Make New Project")
     print("3. Exit")
-    userinput = input()
+    try:
+        userinput = input()
+    except:
+        pass
     if userinput.strip() == '1':
         projects = getExistingProjects()
         if len(projects) > 0:
@@ -97,7 +102,10 @@ while mainContinue:
                 except Exception:
                     pass
             print()
-            userinput = input()
+            try:
+                userinput = input()
+            except:
+                pass
             if userinput.isnumeric() and int(userinput) > 0 and int(userinput) <= len(projects):
                 launchProject(projects[int(userinput)-1][1].strip(), projects[int(userinput)-1][0].strip())
             else:
@@ -107,7 +115,6 @@ while mainContinue:
             print("No exisitng projects found")
     elif userinput.strip() == '2':
         projects = getExistingProjects()
-        print(projects)
         project_name = input("Enter new project name: ")
         project_path = select_directory()
         # Create Directory at specified place
@@ -117,7 +124,6 @@ while mainContinue:
         writeConfigFile(Settings(project_name, None), project_path + f'/{project_name}' + '/config.txt')
         # Add project to projects
         projects.append([project_name, str(project_path) + f'/{project_name}'])
-        print(projects)
         # Save projects to file
         writeProjectsToFile(projects)
 

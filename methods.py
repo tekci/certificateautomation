@@ -1,8 +1,9 @@
 from io import BytesIO
-
 from PIL import Image, ImageDraw, ImageFont
 import os
 from datetime import datetime
+from pdf2image import convert_from_path
+
 
 now = datetime.now()
 dt_string = now.strftime("%d-%m-%Y-%H-%M")
@@ -20,12 +21,22 @@ def select_directory():
     # Return the selected directory path
     return selected_directory
 
-def select_file():
+def select_font():
     root = tk.Tk()
     root.withdraw()  # Hide the main window
 
     # Show the directory selector dialog and store the selected path
     selected_file = filedialog.askopenfilename(initialdir=os.getcwd()+'/fonts')
+
+    # Return the selected directory path
+    return selected_file
+
+def select_file():
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+
+    # Show the directory selector dialog and store the selected path
+    selected_file = filedialog.askopenfilename()
 
     # Return the selected directory path
     return selected_file
@@ -49,7 +60,12 @@ def createCertificate(name, config, path):
     color = tuple(colorList)
 
     # Open the image
-    image = Image.open(certificate_file_path)
+    try:
+        image = Image.open(certificate_file_path)
+    except Exception as e:
+        image = convert_from_path(certificate_file_path)[0]
+
+
 
     # Create a drawing context
     draw = ImageDraw.Draw(image)
@@ -82,8 +98,10 @@ def getDemoImage(config):
         colorList.append(int(item.strip(',')))
     color = tuple(colorList)
 
-    # Open the image
-    image = Image.open(certificate_file_path)
+    try:
+        image = Image.open(certificate_file_path)
+    except Exception:
+        image = convert_from_path(certificate_file_path)[0]
 
     # Create a drawing context
     draw = ImageDraw.Draw(image)
